@@ -226,6 +226,20 @@ figure img {
     padding: 10px 15px;
     background: rgba(0, 0, 0, 0.7);
 }
+.kioptrix {
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    background: url("/assets/images/kioptrix-banner.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.kioptrix h1,
+.hero p {
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.7);
+}
 .home, .edit {
     font-family: monospace;
     text-decoration: none;
