@@ -147,6 +147,9 @@ template {
     .wrapper {
     max-width: 90vw;
 }
+.wrapper .go {
+ color:#586e75
+}
 }h1:first-of-type {
     font-size: 2em;
 }
