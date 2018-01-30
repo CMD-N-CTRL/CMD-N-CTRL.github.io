@@ -285,7 +285,7 @@ div.highlighter-rouge, figure.highlight {
   position: relative;
   margin-bottom: 1em;
   border: 1px solid;
-  background-color: #ffffff;
+  background: none;
  
 
   &:before {
@@ -293,7 +293,7 @@ div.highlighter-rouge, figure.highlight {
     top: 0;
     right: 0;
     padding: 0.5em;
-    background-color: #ffffff;
+    background: none;
     /*content: "\f121";*/
     font-family: "fontawesome" !important;
     font-size: $type-size-7;
