@@ -2,7 +2,7 @@
 layout: single
 title: "VulnHub - Kioptrix 1"
 header:
-  overlay_image: kioptrix-banner.jpg
+  overlay_image: /assets/images/kioptrix-banner.jpg
   caption: "[__VulnHub__](https://www.vulnhub.com/entry/kioptrix-level-1-1,22/)"
 related: true
 comments: true
